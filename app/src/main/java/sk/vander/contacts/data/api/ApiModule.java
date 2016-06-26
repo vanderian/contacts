@@ -17,15 +17,16 @@ import sk.vander.contacts.base.annotation.ApplicationScope;
  */
 @Module
 public class ApiModule {
-  private static final String ENDPOINT = "http://papagaj-breweria.herokuapp.com/api/v1/menu/54ca39f401731406200082df/";
-  
+  private static final String HOST = "https://inloop-contacts.appspot.com/";
+  private static final String API = "_ah/api/";
+
   @ApplicationScope @Provides Gson provideGson() {
     return new GsonBuilder().registerTypeAdapterFactory(new AutoParcelGsonTypeAdapterFactory()).create();
   }
 
   @ApplicationScope @Provides Retrofit provideRetrofit(Gson gson, OkHttpClient okHttpClient) {
     return new Retrofit.Builder()
-        .baseUrl(ENDPOINT)
+        .baseUrl(HOST + API)
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
