@@ -2,6 +2,8 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="sk.vander.contacts">
 
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
     <application
         android:name=".DebugApp"
         tools:replace="android:name"/>

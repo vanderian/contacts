@@ -3,50 +3,40 @@ package sk.vander.contacts.ui;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 
-import javax.inject.Inject;
-
-import autodagger.AutoComponent;
-import autodagger.AutoInjector;
-import sk.vander.contacts.App;
+import butterknife.BindView;
+import sk.vander.contacts.AppComponent;
 import sk.vander.contacts.R;
-import sk.vander.contacts.base.AppContainer;
-import sk.vander.contacts.base.DaggerScope;
+import sk.vander.contacts.base.BaseActivity;
 import sk.vander.contacts.base.DaggerService;
+import sk.vander.contacts.base.StandardActivity;
 
-@AutoComponent(
-    dependencies = App.class
-)
-@AutoInjector
-@DaggerScope(MainActivity.class)
-public class MainActivity extends AppCompatActivity {
-  @Inject AppContainer appContainer;
+@StandardActivity
+public class MainActivity extends BaseActivity {
+  @BindView(R.id.toolbar) Toolbar toolbar;
+  @BindView(R.id.fab) FloatingActionButton fab;
+
+  @Override protected Object onCreateComponent(Object appComponent) {
+    return DaggerMainActivityComponent.builder()
+        .appComponent((AppComponent) appComponent)
+        .build();
+  }
+
+  @Override protected void onInject() {
+    DaggerService.<MainActivityComponent>getDaggerComponent(this).inject(this);
+  }
+
+  @Override protected int layoutId() {
+    return R.layout.activity_main;
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    final MainActivityComponent component = DaggerMainActivityComponent.builder()
-        .appComponent(DaggerService.getDaggerComponent(getApplicationContext()))
-        .build();
-    component.inject(this);
-
-    setContentView(R.layout.activity_main);
-    appContainer.get(this);
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
-
-    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-    fab.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-            .setAction("Action", null).show();
-      }
-    });
+    fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+        .setAction("Action", null).show());
   }
-
 }
