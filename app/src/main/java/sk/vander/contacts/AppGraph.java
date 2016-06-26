@@ -1,14 +1,10 @@
 package sk.vander.contacts;
 
-
-import sk.vander.contacts.navigation.activity.ActivityScreenSwitcher;
+import sk.vander.contacts.base.BaseGraph;
 
 /**
- * Created by arashid on 24/06/16.
+ * Created by arashid on 26/06/16.
  */
-public interface AppGraph {
-  void inject(App app);
+public interface AppGraph extends BaseGraph {
 
-  ActivityHierarchyServer activityHierarchyServer();
-  ActivityScreenSwitcher activityScreenSwitcher();
 }

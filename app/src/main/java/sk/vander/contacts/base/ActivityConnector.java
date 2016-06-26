@@ -1,4 +1,4 @@
-package sk.vander.contacts;
+package sk.vander.contacts.base;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;

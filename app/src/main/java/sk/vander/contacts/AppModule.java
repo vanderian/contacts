@@ -1,46 +1,23 @@
 package sk.vander.contacts;
 
-import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 
-import javax.inject.Singleton;
-
+import autodagger.AutoExpose;
 import dagger.Module;
 import dagger.Provides;
-import sk.vander.contacts.navigation.activity.ActivityScreenSwitcher;
+import sk.vander.contacts.base.BaseAppModule;
+import sk.vander.contacts.base.annotation.ApplicationScope;
 
 /**
- * Created by arashid on 21/06/16.
+ * Created by arashid on 26/06/16.
  */
-@Module
+@Module(includes = BaseAppModule.class)
 public class AppModule {
 
-  Application application;
-
-  public AppModule(Application application) {
-    this.application = application;
-  }
-
-  @Provides @Singleton Application providesApplication() {
-    return application;
-  }
-
-  @Provides @Singleton ActivityScreenSwitcher provideActivityScreenSwitcher() {
-    return new ActivityScreenSwitcher();
-  }
-
-  @Provides @Singleton
-  ActivityHierarchyServer provideActivityScreenSwitcherServer(final ActivityScreenSwitcher screenSwitcher) {
-    return new ActivityHierarchyServer.Empty() {
-      @Override
-      public void onActivityStarted(Activity activity) {
-        screenSwitcher.attach(activity);
-      }
-
-      @Override
-      public void onActivityStopped(Activity activity) {
-        screenSwitcher.detach();
-      }
-    };
+  @AutoExpose(App.class)
+  @Provides @ApplicationScope SharedPreferences provideSharedPreferences(Application application) {
+    return application.getSharedPreferences("name", Context.MODE_PRIVATE);
   }
 }

@@ -1,4 +1,4 @@
-package sk.vander.contacts;
+package sk.vander.contacts.base;
 
 import android.app.Activity;
 import android.app.Application;
@@ -14,35 +14,7 @@ public interface ActivityHierarchyServer extends Application.ActivityLifecycleCa
   /**
    * An {@link ActivityHierarchyServer} which does nothing.
    */
-  ActivityHierarchyServer NONE = new ActivityHierarchyServer() {
-    @Override
-    public void onActivityCreated(Activity activity, Bundle bundle) {
-    }
-
-    @Override
-    public void onActivityStarted(Activity activity) {
-    }
-
-    @Override
-    public void onActivityResumed(Activity activity) {
-    }
-
-    @Override
-    public void onActivityPaused(Activity activity) {
-    }
-
-    @Override
-    public void onActivityStopped(Activity activity) {
-    }
-
-    @Override
-    public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
-    }
-
-    @Override
-    public void onActivityDestroyed(Activity activity) {
-    }
-  };
+  ActivityHierarchyServer NONE = new ActivityHierarchyServer.Empty();
 
   class Proxy implements ActivityHierarchyServer {
     private List<ActivityHierarchyServer> servers = new ArrayList<>();

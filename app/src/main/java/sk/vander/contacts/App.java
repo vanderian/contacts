@@ -1,31 +1,22 @@
 package sk.vander.contacts;
 
-import android.app.Application;
-import android.content.Context;
+import android.support.annotation.CallSuper;
 
-import javax.inject.Inject;
-
-import timber.log.Timber;
+import sk.vander.contacts.base.BaseApp;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
- * Created by arashid on 21/06/16.
+ * Created by arashid on 26/06/16.
  */
-public class App extends Application {
-  private AppComponent appComponent;
-  @Inject ActivityHierarchyServer activityHierarchyServer;
-
-  @Override public void onCreate() {
-    super.onCreate();
-
-    Timber.plant(new Timber.DebugTree());
-
-    appComponent = AppComponent.Initializer.init(this);
-    appComponent.inject(this);
-
-    registerActivityLifecycleCallbacks(activityHierarchyServer);
+@BuildTypeAppComponent
+public class App extends BaseApp<AppComponent> {
+  @Override protected void buildComponentAndInject() {
+    component = Initializer.init(this);
+    component.inject(this);
   }
 
-  public static AppComponent getComponent(Context context) {
-    return ((App) context.getApplicationContext()).appComponent;
+  @CallSuper @Override protected void init() {
+    CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+        .build());
   }
 }

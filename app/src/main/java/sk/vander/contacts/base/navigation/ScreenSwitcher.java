@@ -1,4 +1,4 @@
-package sk.vander.contacts.navigation;
+package sk.vander.contacts.base.navigation;
 
 public interface ScreenSwitcher {
   void open(Screen screen);

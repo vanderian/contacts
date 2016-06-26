@@ -1,4 +1,4 @@
-package sk.vander.contacts.navigation.activity;
+package sk.vander.contacts.base.navigation.activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,7 +14,7 @@ import android.view.Window;
 import java.util.ArrayList;
 import java.util.List;
 
-import sk.vander.contacts.navigation.Screen;
+import sk.vander.contacts.base.navigation.Screen;
 
 
 public abstract class ActivityScreen implements Screen {
@@ -33,9 +33,9 @@ public abstract class ActivityScreen implements Screen {
 
   protected Bundle activityOptions(Activity activity) {
     final List<Pair<View, String>> transitionViews = new ArrayList<>(pairs);
-//    if (transitionViews.isEmpty()) {
-//      return null;
-//    }
+    if (transitionViews.isEmpty()) {
+      return null;
+    }
     pairs = null;
 
     final View decor = activity.getWindow().getDecorView();

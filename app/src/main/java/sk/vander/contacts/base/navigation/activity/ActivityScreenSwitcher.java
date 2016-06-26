@@ -1,4 +1,4 @@
-package sk.vander.contacts.navigation.activity;
+package sk.vander.contacts.base.navigation.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,9 +7,9 @@ import android.widget.Toast;
 
 import java.security.InvalidParameterException;
 
-import sk.vander.contacts.ActivityConnector;
-import sk.vander.contacts.navigation.Screen;
-import sk.vander.contacts.navigation.ScreenSwitcher;
+import sk.vander.contacts.base.ActivityConnector;
+import sk.vander.contacts.base.navigation.Screen;
+import sk.vander.contacts.base.navigation.ScreenSwitcher;
 import timber.log.Timber;
 
 public class ActivityScreenSwitcher extends ActivityConnector<Activity> implements ScreenSwitcher {
