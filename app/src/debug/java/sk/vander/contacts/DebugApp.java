@@ -1,5 +1,6 @@
 package sk.vander.contacts;
 
+import com.facebook.stetho.Stetho;
 import com.squareup.leakcanary.LeakCanary;
 
 import autodagger.AutoInjector;
@@ -19,5 +20,6 @@ public class DebugApp extends App {
     super.init();
     Timber.plant(new Timber.DebugTree());
     LeakCanary.install(this);
+    Stetho.initializeWithDefaults(this);
   }
 }

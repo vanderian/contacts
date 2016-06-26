@@ -7,6 +7,7 @@ import sk.vander.contacts.base.AppContainer;
 import sk.vander.contacts.base.SocketActivityHierarchyServer;
 import sk.vander.contacts.base.annotation.ActivityScreenSwitcherServer;
 import sk.vander.contacts.base.annotation.ApplicationScope;
+import sk.vander.contacts.ui.debug.DebugAppContainer;
 
 /**
  * Created by arashid on 26/06/16.
@@ -16,7 +17,7 @@ public class DebugUiModule {
 
 //  provide a container with additional debug views
   @Provides @ApplicationScope AppContainer providesAppContainer() {
-    return AppContainer.DEFAULT;
+    return new DebugAppContainer();
   }
 
   @Provides @ApplicationScope
