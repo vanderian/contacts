@@ -3,6 +3,7 @@ package sk.vander.contacts;
 import autodagger.AutoComponent;
 import autodagger.AutoInjector;
 import sk.vander.contacts.base.annotation.ApplicationScope;
+import sk.vander.contacts.data.DebugDataModule;
 import sk.vander.contacts.ui.DebugUiModule;
 
 /**
@@ -10,7 +11,7 @@ import sk.vander.contacts.ui.DebugUiModule;
  */
 @ApplicationScope
 @AutoComponent(
-    modules = {DebugAppModule.class, DebugUiModule.class},
+    modules = {DebugAppModule.class, DebugUiModule.class, DebugDataModule.class},
     superinterfaces = DebugAppGraph.class
 )
 @AutoInjector

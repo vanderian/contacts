@@ -1,4 +1,4 @@
-package sk.vander.contacts.data.api.model;
+package sk.vander.contacts.data.api.error;
 
 import org.jetbrains.annotations.Nullable;
 

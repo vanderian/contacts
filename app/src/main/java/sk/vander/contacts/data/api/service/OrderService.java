@@ -9,6 +9,6 @@ import sk.vander.contacts.data.api.model.ResponseList;
 /**
  * Created by arashid on 27/06/16.
  */
-public interface OderService {
+public interface OrderService {
   @GET("_ah/api/orderendpoint/v1/order/{id}") Observable<ResponseList<Order>> getOrders(@Path("id") String contactId);
 }

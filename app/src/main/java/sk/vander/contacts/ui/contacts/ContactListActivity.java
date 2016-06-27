@@ -1,4 +1,4 @@
-package sk.vander.contacts.ui;
+package sk.vander.contacts.ui.contacts;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,18 +13,18 @@ import sk.vander.contacts.base.DaggerService;
 import sk.vander.contacts.base.StandardActivity;
 
 @StandardActivity
-public class MainActivity extends BaseActivity {
+public class ContactListActivity extends BaseActivity {
   @BindView(R.id.toolbar) Toolbar toolbar;
   @BindView(R.id.fab) FloatingActionButton fab;
 
   @Override protected Object onCreateComponent(Object appComponent) {
-    return DaggerMainActivityComponent.builder()
+    return DaggerContactListActivityComponent.builder()
         .appComponent((AppComponent) appComponent)
         .build();
   }
 
   @Override protected void onInject() {
-    DaggerService.<MainActivityComponent>getDaggerComponent(this).inject(this);
+    DaggerService.<ContactListActivityComponent>getDaggerComponent(this).inject(this);
   }
 
   @Override protected int layoutId() {

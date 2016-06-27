@@ -7,13 +7,13 @@ import retrofit2.http.POST;
 import rx.Observable;
 import sk.vander.contacts.data.api.model.Contact;
 import sk.vander.contacts.data.api.model.RequestContact;
-import sk.vander.contacts.data.api.model.ResponseList;
+import sk.vander.contacts.data.api.model.ResponseContacts;
 
 /**
  * Created by arashid on 27/06/16.
  */
 public interface ContactService {
-  @GET("contactendpoint/v1/contacts") Observable<ResponseList<Contact>> getContacts();
+  @GET("contactendpoint/v1/contact") Observable<ResponseContacts> getContacts();
 
   @Headers("application/json")
   @POST("contactendpoint/v1/contact") Observable<Contact> createContact(@Body RequestContact contact);
