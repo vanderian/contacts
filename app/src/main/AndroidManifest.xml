@@ -31,7 +31,8 @@
 
         <activity
             android:name=".ui.contacts.ContactAddActivity"
-            android:label="@string/label_add_contact">
+            android:label="@string/label_add_contact"
+            android:parentActivityName=".ui.contacts.ContactListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>

@@ -35,6 +35,7 @@ public class ContactListActivity extends BaseActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+//    toolbar.setTitle(R.string.label_contacts);
     setSupportActionBar(toolbar);
   }
 }

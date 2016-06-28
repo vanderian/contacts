@@ -11,6 +11,7 @@ import rx.subjects.BehaviorSubject;
 import sk.vander.contacts.App;
 import sk.vander.contacts.base.annotation.ApplicationScope;
 import sk.vander.contacts.data.api.model.Contact;
+import sk.vander.contacts.data.api.model.Order;
 import sk.vander.contacts.data.api.model.RequestContact;
 import sk.vander.contacts.data.api.model.ResponseList;
 import sk.vander.contacts.data.api.service.ContactService;
@@ -35,9 +36,9 @@ public class DataProvider {
     return contactService.getContacts().map(ResponseList::items).subscribeOn(Schedulers.io());
   }
 
-//  public Observable<List<Order>> getOrders() {
-//    return selectedContact.flatMap(c -> orderService.getOrders(c.id())).map(ResponseList::items).subscribeOn(Schedulers.io());
-//  }
+  public Observable<List<Order>> getOrders() {
+    return selectedContact.flatMap(c -> orderService.getOrders(c.id())).map(ResponseList::items).subscribeOn(Schedulers.io());
+  }
 
   public Observable<Contact> getSelectedContact() {
     return selectedContact.asObservable();

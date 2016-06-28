@@ -14,31 +14,27 @@ import sk.vander.contacts.base.StandardActivity;
 
 @StandardActivity
 @AutoInjector
-public class ContactAddActivity extends BaseActivity {
-  public static final Uri URI = Uri.parse(HOST + "contact/add");
+public class ContactOrderActivity extends BaseActivity {
+  public static final Uri URI = Uri.parse(HOST + "contact/order");
   @BindView(R.id.toolbar) Toolbar toolbar;
 
   @Override protected Object onCreateComponent(Object appComponent) {
-    return DaggerContactAddActivityComponent.builder()
+    return DaggerContactOrderActivityComponent.builder()
         .appComponent((AppComponent) appComponent)
         .build();
   }
 
   @Override protected void onInject() {
-    DaggerService.<ContactAddActivityComponent>getDaggerComponent(this).inject(this);
+    DaggerService.<ContactOrderActivityComponent>getDaggerComponent(this).inject(this);
   }
 
   @Override protected int layoutId() {
-    return R.layout.activity_add_contact;
+    return R.layout.activity_contacts;
   }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-//    ActivityScreen.setTransitionView(toolbar, "toolbar");
-//    toolbar.setTitle(R.string.label_add_contact);
-//    toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-//    toolbar.setNavigationOnClickListener(v -> finish());
     setSupportActionBar(toolbar);
   }
 }

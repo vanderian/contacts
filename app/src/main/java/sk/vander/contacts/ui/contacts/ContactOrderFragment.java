@@ -1,8 +1,9 @@
 package sk.vander.contacts.ui.contacts;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -15,6 +16,7 @@ import javax.inject.Inject;
 
 import autodagger.AutoInjector;
 import butterknife.BindView;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import sk.vander.contacts.R;
 import sk.vander.contacts.base.BaseFragment;
@@ -22,33 +24,33 @@ import sk.vander.contacts.base.DaggerService;
 import sk.vander.contacts.base.adapter.ListSource;
 import sk.vander.contacts.base.adapter.ObservableAdapter;
 import sk.vander.contacts.base.navigation.activity.ActivityUriScreen;
-import sk.vander.contacts.data.api.model.Contact;
+import sk.vander.contacts.data.api.model.Order;
 import sk.vander.contacts.data.provider.DataProvider;
 import sk.vander.contacts.misc.SwipeRefreshObservable;
-import sk.vander.contacts.ui.contacts.adapter.ContactsSource;
+import sk.vander.contacts.ui.contacts.adapter.OrderSource;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-@AutoInjector(ContactListActivity.class)
-public class ContactListFragment extends BaseFragment {
+@AutoInjector(ContactOrderActivity.class)
+public class ContactOrderFragment extends BaseFragment {
   @Inject DataProvider dataProvider;
-  private final ListSource<Contact> source = new ContactsSource();
-  private final ObservableAdapter<Contact> adapter = new ObservableAdapter<>(source);
+  private final ListSource<Order> source = new OrderSource();
+  private final ObservableAdapter<Order> adapter = new ObservableAdapter<>(source);
 
   @BindView(R.id.refresh) SwipeRefreshLayout refreshLayout;
   @BindView(R.id.list) RecyclerView recyclerView;
-  @BindView(R.id.fab) FloatingActionButton fab;
+  @BindView(R.id.frame_header) View header;
 
-  public ContactListFragment() {
+  public ContactOrderFragment() {
   }
 
   @Override protected void onInject() {
-    DaggerService.<ContactListActivityComponent>getDaggerComponent(getContext()).inject(this);
+    DaggerService.<ContactOrderActivityComponent>getDaggerComponent(getContext()).inject(this);
   }
 
   @Override protected int layoutId() {
-    return R.layout.fragment_contacts;
+    return R.layout.fragment_orders;
   }
 
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -61,14 +63,16 @@ public class ContactListFragment extends BaseFragment {
 
   @Override public void onResume() {
     super.onResume();
-    subscription.add(RxView.clicks(fab)
-        .map(x -> ActivityUriScreen.newBuilder().withUri(ContactAddActivity.URI)
+    subscription.add(Observable.combineLatest(RxView.clicks(header), dataProvider.getSelectedContact(), (x, c) -> c)
+        .map(c -> ActivityUriScreen.newBuilder()
+            .withAction(Intent.ACTION_CALL)
+            .withUri(Uri.parse("tel://" + c.phone()))
 //            .withTransitionView(((ContactListActivity) getActivity()).toolbar, "toolbar")
             .build())
         .subscribe(screenSwitcher::open));
 
     subscription.add(SwipeRefreshObservable.create(refreshLayout)
-        .flatMap(x -> dataProvider.getContacts()
+        .flatMap(x -> dataProvider.getOrders()
             .observeOn(AndroidSchedulers.mainThread())
             .onErrorResumeNext(t -> onError(t).map(er -> Collections.emptyList())))
         .doOnNext(source::setList)
