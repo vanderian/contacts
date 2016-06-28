@@ -59,6 +59,7 @@ public class ContactAddFragment extends BaseFragment {
             .observeOn(AndroidSchedulers.mainThread())
             .onErrorResumeNext(t -> onError(t).map(x -> null)))
         // TODO: 28/06/16 refresh data
+        // TODO: 28/06/16 add progress view to disable view
 //        .doOnNext()
         .subscribe(x -> screenSwitcher.goBack(), Throwable::printStackTrace)
     );
