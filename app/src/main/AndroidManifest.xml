@@ -19,6 +19,7 @@
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
@@ -33,7 +34,8 @@
         <activity
             android:name=".ui.contacts.ContactAddActivity"
             android:label="@string/label_add_contact"
-            android:parentActivityName=".ui.contacts.ContactListActivity">
+            android:parentActivityName=".ui.contacts.ContactListActivity"
+            android:windowSoftInputMode="stateVisible">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>

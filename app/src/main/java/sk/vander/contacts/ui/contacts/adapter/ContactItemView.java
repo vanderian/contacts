@@ -1,6 +1,7 @@
 package sk.vander.contacts.ui.contacts.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -50,7 +51,7 @@ public class ContactItemView extends RelativeLayout implements BindableView<Cont
     Picasso.with(getContext()).cancelRequest(photo);
     name.setText(item.name());
     phone.setText(item.phone());
-    final String url = item.pictureUrl() != null ? ApiModule.HOST + item.pictureUrl() : null;
+    final String url = !TextUtils.isEmpty(item.pictureUrl()) ? ApiModule.HOST + item.pictureUrl() : null;
     Picasso.with(getContext())
         .load(url)
         .placeholder(R.drawable.ic_person_outline)

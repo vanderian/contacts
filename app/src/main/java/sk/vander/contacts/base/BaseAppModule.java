@@ -1,6 +1,7 @@
 package sk.vander.contacts.base;
 
 import android.app.Application;
+import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
@@ -19,5 +20,9 @@ public class BaseAppModule {
 
   @Provides @ApplicationScope Application provideApplication() {
     return app;
+  }
+
+  @Provides @ApplicationScope Context provideApplicationContext() {
+    return app.getApplicationContext();
   }
 }

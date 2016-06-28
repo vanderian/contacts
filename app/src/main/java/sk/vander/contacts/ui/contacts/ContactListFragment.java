@@ -57,7 +57,6 @@ public class ContactListFragment extends BaseFragment {
 
     recyclerView.setAdapter(adapter);
     recyclerView.setHasFixedSize(true);
-    refreshLayout.setProgressBackgroundColorSchemeResource(R.color.colorPrimary);
     refreshLayout.setColorSchemeResources(R.color.red_500, R.color.yellow_500, R.color.green_500);
   }
 

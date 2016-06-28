@@ -15,9 +15,8 @@ import sk.vander.contacts.ui.debug.DebugAppContainer;
 @Module(includes = UiModule.class)
 public class DebugUiModule {
 
-//  provide a container with additional debug views
-  @Provides @ApplicationScope AppContainer providesAppContainer() {
-    return new DebugAppContainer();
+  @Provides @ApplicationScope AppContainer providesAppContainer(DebugAppContainer container) {
+    return container;
   }
 
   @Provides @ApplicationScope

@@ -50,9 +50,10 @@ public abstract class BaseFragment extends Fragment {
 
   protected Observable<ResponseError> onError(Throwable throwable) {
     return Observable.just(throwable)
+        .doOnNext(Throwable::printStackTrace)
         .ofType(RetrofitException.class)
         .flatMap(RetrofitException::getAsErrorResponse)
-        .filter(er -> er.error() != null)
+        .filter(er -> er != null)
 //        .doOnNext(er -> Snackbar.make(getView(), er.error().message(), Snackbar.LENGTH_SHORT).show())
         .doOnNext(er -> Toast.makeText(getContext(), er.error().message(), Toast.LENGTH_SHORT).show());
   }
