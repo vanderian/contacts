@@ -15,4 +15,9 @@ public abstract class Contact {
   @Nullable public abstract String phone();
   @Nullable public abstract String pictureUrl();
   @Nullable public abstract String etag();
+
+  public static Contact create(String id, String name, String kind,
+                               @Nullable String phone, @Nullable String pictureUrl, @Nullable String etag) {
+    return new AutoParcelGson_Contact(id, name, kind, phone, pictureUrl, etag);
+  }
 }

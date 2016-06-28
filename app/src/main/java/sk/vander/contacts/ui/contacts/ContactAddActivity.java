@@ -40,5 +40,6 @@ public class ContactAddActivity extends BaseActivity {
 //    toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
 //    toolbar.setNavigationOnClickListener(v -> finish());
     setSupportActionBar(toolbar);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
   }
 }

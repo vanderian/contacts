@@ -45,6 +45,7 @@ public abstract class BaseFragment extends Fragment {
     return Observable.just(throwable)
         .ofType(RetrofitException.class)
         .flatMap(RetrofitException::getAsErrorResponse)
+        .filter(er -> er.error() != null)
 //        .doOnNext(er -> Snackbar.make(getView(), er.error().message(), Snackbar.LENGTH_SHORT).show())
         .doOnNext(er -> Toast.makeText(getContext(), er.error().message(), Toast.LENGTH_SHORT).show());
   }

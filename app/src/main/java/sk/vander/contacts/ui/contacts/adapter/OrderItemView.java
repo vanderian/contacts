@@ -43,7 +43,7 @@ public class OrderItemView extends RelativeLayout implements BindableView<Order>
 
   @Override public void bindTo(Order item) {
     name.setText(item.name());
-    count.setText(item.count());
+    count.setText(getContext().getString(R.string.form_count, item.count()));
   }
 
   @Override public View getView() {

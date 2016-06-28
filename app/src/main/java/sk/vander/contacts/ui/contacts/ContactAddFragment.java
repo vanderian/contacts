@@ -17,7 +17,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import sk.vander.contacts.R;
 import sk.vander.contacts.base.BaseFragment;
 import sk.vander.contacts.base.DaggerService;
-import sk.vander.contacts.data.api.model.RequestContact;
+import sk.vander.contacts.data.api.model.request.ContactRequest;
 import sk.vander.contacts.data.provider.DataProvider;
 
 /**
@@ -54,7 +54,7 @@ public class ContactAddFragment extends BaseFragment {
         .subscribe(add::setEnabled));
 
     subscription.add(RxView.clicks(add)
-        .map(x -> RequestContact.create(name.getText().toString(), phone.getText().toString()))
+        .map(x -> ContactRequest.create(name.getText().toString(), phone.getText().toString()))
         .flatMap(rc -> dataProvider.createContact(rc)
             .observeOn(AndroidSchedulers.mainThread())
             .onErrorResumeNext(t -> onError(t).map(x -> null)))

@@ -65,6 +65,7 @@ public abstract class BaseActivity extends AppCompatActivity {
   protected abstract Object onCreateComponent(Object appComponent);
   protected abstract void onInject();
 
+  // TODO: 28/06/16 could use annotation on class
   protected abstract @LayoutRes int layoutId();
 
 }

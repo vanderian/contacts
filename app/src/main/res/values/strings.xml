@@ -6,6 +6,7 @@
 
     <string name="label_contacts">Contacts</string>
     <string name="label_add_contact">Add New Contact</string>
+    <string name="label_contact_order">Orders</string>
 
     <string name="hint_full_name">First and Last Name</string>
     <string name="hint_phone">Phone</string>
@@ -14,4 +15,6 @@
     <string name="validation_min_char">Please enter at least 5 characters</string>
 
     <string name="form_phone">Phone</string>
+    <string name="form_count">%dx</string>
+
 </resources>

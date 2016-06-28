@@ -74,5 +74,11 @@ public class ContactListFragment extends BaseFragment {
         .doOnNext(source::setList)
         .doOnEach(x -> refreshLayout.setRefreshing(false))
         .subscribe(x -> adapter.notifyDataSetChanged(), Throwable::printStackTrace));
+
+    subscription.add(adapter.onItemClicked()
+        .map(ObservableAdapter.ViewHolder::getItem)
+        .doOnNext(dataProvider.selectedContact()::onNext)
+        .map(x -> ActivityUriScreen.withUri(ContactOrderActivity.URI))
+        .subscribe(screenSwitcher::open));
   }
 }

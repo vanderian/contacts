@@ -11,8 +11,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import sk.vander.contacts.base.annotation.ApplicationScope;
 import sk.vander.contacts.data.api.error.RxErrorHandlingCallAdapterFactory;
-import sk.vander.contacts.data.api.service.ContactService;
-import sk.vander.contacts.data.api.service.OrderService;
 
 /**
  * Created by arashid on 27/06/16.
@@ -34,15 +32,5 @@ public class ApiModule {
 //        .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
         .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory.create())
         .build();
-  }
-
-  //// TODO: 27/06/16 debug/mock and release impl
-  @ApplicationScope @Provides ContactService provideContacService(Retrofit retrofit) {
-    return retrofit.create(ContactService.class);
-  }
-
-  //// TODO: 27/06/16 debug/mock and release impl
-  @ApplicationScope @Provides OrderService provideOrderService(Retrofit retrofit) {
-    return retrofit.create(OrderService.class);
   }
 }

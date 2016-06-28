@@ -50,11 +50,12 @@ public class ContactItemView extends RelativeLayout implements BindableView<Cont
     Picasso.with(getContext()).cancelRequest(photo);
     name.setText(item.name());
     phone.setText(item.phone());
-    if (item.pictureUrl() != null) {
-      Picasso.with(getContext())
-          .load(ApiModule.HOST + item.pictureUrl())
-          .into(photo);
-    }
+    final String url = item.pictureUrl() != null ? ApiModule.HOST + item.pictureUrl() : null;
+    Picasso.with(getContext())
+        .load(url)
+        .placeholder(R.drawable.ic_person_outline)
+        .error(R.drawable.ic_person_outline)
+        .into(photo);
   }
 
   @Override public View getView() {

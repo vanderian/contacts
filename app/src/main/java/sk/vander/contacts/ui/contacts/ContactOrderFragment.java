@@ -1,12 +1,15 @@
 package sk.vander.contacts.ui.contacts;
 
+import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.jakewharton.rxbinding.view.RxView;
 
@@ -26,6 +29,7 @@ import sk.vander.contacts.base.adapter.ObservableAdapter;
 import sk.vander.contacts.base.navigation.activity.ActivityUriScreen;
 import sk.vander.contacts.data.api.model.Order;
 import sk.vander.contacts.data.provider.DataProvider;
+import sk.vander.contacts.misc.RuntimePermissions;
 import sk.vander.contacts.misc.SwipeRefreshObservable;
 import sk.vander.contacts.ui.contacts.adapter.OrderSource;
 
@@ -41,6 +45,7 @@ public class ContactOrderFragment extends BaseFragment {
   @BindView(R.id.refresh) SwipeRefreshLayout refreshLayout;
   @BindView(R.id.list) RecyclerView recyclerView;
   @BindView(R.id.frame_header) View header;
+  @BindView(R.id.phone) TextView phone;
 
   public ContactOrderFragment() {
   }
@@ -63,13 +68,17 @@ public class ContactOrderFragment extends BaseFragment {
 
   @Override public void onResume() {
     super.onResume();
-    subscription.add(Observable.combineLatest(RxView.clicks(header), dataProvider.getSelectedContact(), (x, c) -> c)
+    subscription.add(Observable.combineLatest(RxView.clicks(header),
+        dataProvider.selectedContact().doOnNext(c -> phone.setText(c.phone())),
+        (x, c) -> c)
+        .filter(c -> RuntimePermissions.requestPermissions(getActivity(), Manifest.permission.CALL_PHONE))
+        .flatMap(c -> snack(Snackbar.make(getView(), "Make call?", Snackbar.LENGTH_SHORT)).map(s -> c))
         .map(c -> ActivityUriScreen.newBuilder()
             .withAction(Intent.ACTION_CALL)
             .withUri(Uri.parse("tel://" + c.phone()))
 //            .withTransitionView(((ContactListActivity) getActivity()).toolbar, "toolbar")
             .build())
-        .subscribe(screenSwitcher::open));
+        .subscribe(screenSwitcher::open, Throwable::printStackTrace));
 
     subscription.add(SwipeRefreshObservable.create(refreshLayout)
         .flatMap(x -> dataProvider.getOrders()
@@ -78,5 +87,14 @@ public class ContactOrderFragment extends BaseFragment {
         .doOnNext(source::setList)
         .doOnEach(x -> refreshLayout.setRefreshing(false))
         .subscribe(x -> adapter.notifyDataSetChanged(), Throwable::printStackTrace));
+  }
+
+  private Observable<Snackbar> snack(Snackbar snackbar) {
+    return Observable.create(subscriber -> {
+      snackbar.setAction("Call", v -> {
+        subscriber.onNext(snackbar);
+        subscriber.onCompleted();
+      }).show();
+    });
   }
 }
