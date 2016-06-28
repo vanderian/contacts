@@ -13,14 +13,35 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.contacts.ContactListActivity"
-            android:label="@string/label_contacts"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="@string/label_contacts">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data
+                    android:host="sk.vander"
+                    android:path="/contact/list"
+                    android:scheme="app"/>
+            </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.contacts.ContactAddActivity"
+            android:label="@string/label_add_contact">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data
+                    android:host="sk.vander"
+                    android:path="/contact/add"
+                    android:scheme="app"/>
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

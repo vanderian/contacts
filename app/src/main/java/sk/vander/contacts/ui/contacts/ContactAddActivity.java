@@ -14,22 +14,22 @@ import sk.vander.contacts.base.StandardActivity;
 
 @StandardActivity
 @AutoInjector
-public class ContactListActivity extends BaseActivity {
-  public static final Uri URI = Uri.parse(HOST + "contact/list");
+public class ContactAddActivity extends BaseActivity {
+  public static final Uri URI = Uri.parse(HOST + "contact/add");
   @BindView(R.id.toolbar) Toolbar toolbar;
 
   @Override protected Object onCreateComponent(Object appComponent) {
-    return DaggerContactListActivityComponent.builder()
+    return DaggerContactAddActivityComponent.builder()
         .appComponent((AppComponent) appComponent)
         .build();
   }
 
   @Override protected void onInject() {
-    DaggerService.<ContactListActivityComponent>getDaggerComponent(this).inject(this);
+    DaggerService.<ContactAddActivityComponent>getDaggerComponent(this).inject(this);
   }
 
   @Override protected int layoutId() {
-    return R.layout.activity_contacts;
+    return R.layout.activity_add_contact;
   }
 
   @Override

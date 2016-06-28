@@ -17,6 +17,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  * Created by arashid on 26/06/16.
  */
 public abstract class BaseActivity extends AppCompatActivity {
+  protected static final String HOST = "app://sk.vander/";
   @Inject AppContainer appContainer;
   private ViewGroup content;
   private Object component;

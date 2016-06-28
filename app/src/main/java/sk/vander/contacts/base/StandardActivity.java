@@ -1,7 +1,6 @@
 package sk.vander.contacts.base;
 
 import autodagger.AutoComponent;
-import autodagger.AutoInjector;
 import sk.vander.contacts.App;
 import sk.vander.contacts.base.annotation.ActivityScope;
 
@@ -12,7 +11,6 @@ import sk.vander.contacts.base.annotation.ActivityScope;
     dependencies = App.class,
     modules = ActivityModule.class
 )
-@AutoInjector
 @ActivityScope
 public @interface StandardActivity {
 }

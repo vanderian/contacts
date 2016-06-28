@@ -6,7 +6,6 @@ import javax.inject.Inject;
 
 import autodagger.AutoExpose;
 import rx.Observable;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import rx.subjects.BehaviorSubject;
 import sk.vander.contacts.App;
@@ -44,7 +43,7 @@ public class DataProvider {
     return selectedContact.asObservable();
   }
 
-  public Func1<RequestContact, Observable<Contact>> createContact() {
-    return rc -> contactService.createContact(rc).subscribeOn(Schedulers.io());
+  public Observable<Contact> createContact(RequestContact rc) {
+    return contactService.createContact(rc).subscribeOn(Schedulers.io());
   }
 }

@@ -15,6 +15,6 @@ import sk.vander.contacts.data.api.model.ResponseContacts;
 public interface ContactService {
   @GET("contactendpoint/v1/contact") Observable<ResponseContacts> getContacts();
 
-  @Headers("application/json")
+  @Headers("Content-Type: application/json")
   @POST("contactendpoint/v1/contact") Observable<Contact> createContact(@Body RequestContact contact);
 }

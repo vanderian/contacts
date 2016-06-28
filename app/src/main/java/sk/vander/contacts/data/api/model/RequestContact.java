@@ -10,7 +10,7 @@ public abstract class RequestContact {
   public abstract String name();
   public abstract String phone();
 
-  public RequestContact create(String name, String phone) {
+  public static RequestContact create(String name, String phone) {
     return new AutoParcelGson_RequestContact(name, phone);
   }
 }
