@@ -5,6 +5,7 @@
     <color name="colorAccent">@color/amber_A700</color>
 
     <color name="app_bg">@color/grey_850</color>
-    <color name="bg_dim">#3000</color>
+    <color name="bg_dim_light">#3000</color>
+    <color name="bg_dim_dark">#8000</color>
     <color name="gradient_center">@color/grey_700</color>
 </resources>

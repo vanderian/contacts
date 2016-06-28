@@ -40,9 +40,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
   private Object component;
 
-  @BindView(R.id.appBar) public AppBarLayout appBar;
-  @BindView(R.id.toolbar) protected Toolbar toolbar;
   @BindView(R.id.frame_content) protected ViewGroup contentFrame;
+  @BindView(R.id.appBar) protected AppBarLayout appBar;
+  @BindView(R.id.toolbar) protected Toolbar toolbar;
+  @BindView(R.id.progress) protected View progress;
 
   @Override protected void attachBaseContext(Context newBase) {
     super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -85,6 +86,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 //      contentFrame.addView(content);
     }
     ButterKnife.bind(this);
+//    consume clicks
+    progress.setOnClickListener(v -> {});
   }
 
   protected void setupAppBar() {
@@ -104,6 +107,18 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
   }
 
+  protected @LayoutRes int layoutId() {
+    return Utils.getAnnotationValue(getClass(), INT_CACHE, LayoutId.class);
+  }
+
+  public AppBarLayout getAppBar() {
+    return appBar;
+  }
+
+  public void showProgress(boolean show) {
+    progress.setVisibility(show ? View.VISIBLE : View.GONE);
+  }
+
   /**
    * <p>
    * Must be implemented by derived activities. Injection must be performed here.
@@ -114,9 +129,6 @@ public abstract class BaseActivity extends AppCompatActivity {
    * @param appComponent application level component
    */
   protected abstract Object onCreateComponent(Object appComponent);
-  protected abstract void onInject();
 
-  protected @LayoutRes int layoutId() {
-    return Utils.getAnnotationValue(getClass(), INT_CACHE, LayoutId.class);
-  }
+  protected abstract void onInject();
 }

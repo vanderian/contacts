@@ -20,9 +20,9 @@ import rx.Observable;
 import rx.subscriptions.CompositeSubscription;
 import sk.vander.contacts.base.annotation.LayoutId;
 import sk.vander.contacts.base.navigation.activity.ActivityScreenSwitcher;
-import sk.vander.contacts.data.api.error.ResponseError;
 import sk.vander.contacts.data.api.error.RetrofitException;
 import sk.vander.contacts.misc.Utils;
+import timber.log.Timber;
 
 public abstract class BaseFragment extends Fragment {
   private static final Map<String, Integer> INT_CACHE = new LinkedHashMap<>();
@@ -48,14 +48,22 @@ public abstract class BaseFragment extends Fragment {
     ButterKnife.bind(this, view);
   }
 
-  protected Observable<ResponseError> onError(Throwable throwable) {
+  protected Observable<String> onError(Throwable throwable) {
     return Observable.just(throwable)
-        .doOnNext(Throwable::printStackTrace)
+        .doOnNext(t -> Timber.d(t, "BaseFragment: Api Error"))
         .ofType(RetrofitException.class)
-        .flatMap(RetrofitException::getAsErrorResponse)
-        .filter(er -> er != null)
+        .flatMap(ex -> {
+          if (RetrofitException.Kind.NETWORK.equals(ex.getKind())) {
+            return Observable.just(ex.getMessage());
+          }
+          if (RetrofitException.Kind.HTTP.equals(ex.getKind())) {
+            return ex.getAsErrorResponse().map(er -> er.error().message());
+          }
+//          Unexpected error -> crash
+          return Observable.error(ex);
+        })
 //        .doOnNext(er -> Snackbar.make(getView(), er.error().message(), Snackbar.LENGTH_SHORT).show())
-        .doOnNext(er -> Toast.makeText(getContext(), er.error().message(), Toast.LENGTH_SHORT).show());
+        .doOnNext(er -> Toast.makeText(getContext(), er, Toast.LENGTH_SHORT).show());
   }
 
   @Override public void onPause() {
@@ -65,6 +73,10 @@ public abstract class BaseFragment extends Fragment {
 
   @LayoutRes protected int layoutId() {
     return Utils.getAnnotationValue(getClass(), INT_CACHE, LayoutId.class);
+  }
+
+  public BaseActivity getBaseActivity() {
+    return (BaseActivity) getActivity();
   }
 
   protected abstract void onInject();

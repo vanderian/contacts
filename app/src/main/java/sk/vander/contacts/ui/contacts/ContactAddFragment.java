@@ -53,12 +53,12 @@ public class ContactAddFragment extends BaseFragment {
 
     subscription.add(RxView.clicks(add)
         .map(x -> ContactRequest.create(name.getText().toString(), phone.getText().toString()))
+        .doOnNext(x -> getBaseActivity().showProgress(true))
         .flatMap(rc -> dataProvider.createContact(rc)
             .observeOn(AndroidSchedulers.mainThread())
             .onErrorResumeNext(t -> onError(t).map(x -> null)))
         // TODO: 28/06/16 refresh data
-        // TODO: 28/06/16 add progress view to disable view
-//        .doOnNext()
+        .doOnEach(x -> getBaseActivity().showProgress(false))
         .subscribe(x -> screenSwitcher.goBack(), Throwable::printStackTrace)
     );
   }

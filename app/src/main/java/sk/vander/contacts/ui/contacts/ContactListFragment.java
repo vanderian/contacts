@@ -18,7 +18,6 @@ import autodagger.AutoInjector;
 import butterknife.BindView;
 import rx.android.schedulers.AndroidSchedulers;
 import sk.vander.contacts.R;
-import sk.vander.contacts.base.BaseActivity;
 import sk.vander.contacts.base.BaseFragment;
 import sk.vander.contacts.base.DaggerService;
 import sk.vander.contacts.base.adapter.ListSource;
@@ -67,7 +66,7 @@ public class ContactListFragment extends BaseFragment {
 //            .withTransitionView(((ContactListActivity) getActivity()).appBar, "toolbar")
             .build())
         .subscribe(screenSwitcher::open));
-//        .subscribe(x -> Snackbar.make(getView(), "text", Snackbar.LENGTH_SHORT).show()));
+//        .subscribe(x -> getBaseActivity().showProgress(true)));
 
     subscription.add(SwipeRefreshObservable.create(refreshLayout)
         .flatMap(x -> dataProvider.getContacts()
@@ -82,7 +81,7 @@ public class ContactListFragment extends BaseFragment {
         .doOnNext(vh -> dataProvider.selectedContact().onNext(vh.getItem()))
         .map(vh -> ActivityUriScreen.newBuilder()
             .withTransitionView(((ContactItemView) vh.itemView).phone, "phone")
-            .withTransitionView(((BaseActivity) getActivity()).appBar, "appBar")
+            .withTransitionView(getBaseActivity().getAppBar(), "appBar")
             .withUri(Uri.parse(getString(R.string.nav_contact_order)))
             .build())
         .subscribe(screenSwitcher::open));
