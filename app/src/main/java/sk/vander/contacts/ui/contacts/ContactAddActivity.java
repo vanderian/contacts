@@ -1,6 +1,5 @@
 package sk.vander.contacts.ui.contacts;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
@@ -11,11 +10,16 @@ import sk.vander.contacts.R;
 import sk.vander.contacts.base.BaseActivity;
 import sk.vander.contacts.base.DaggerService;
 import sk.vander.contacts.base.StandardActivity;
+import sk.vander.contacts.base.annotation.LayoutId;
+import sk.vander.contacts.base.annotation.ScreenLabel;
+import sk.vander.contacts.base.annotation.ShowUp;
 
 @StandardActivity
 @AutoInjector
+@ShowUp
+@ScreenLabel(R.string.label_add_contact)
+@LayoutId(R.layout.activity_add_contact)
 public class ContactAddActivity extends BaseActivity {
-  public static final Uri URI = Uri.parse(HOST + "contact/add");
   @BindView(R.id.toolbar) Toolbar toolbar;
 
   @Override protected Object onCreateComponent(Object appComponent) {
@@ -28,18 +32,9 @@ public class ContactAddActivity extends BaseActivity {
     DaggerService.<ContactAddActivityComponent>getDaggerComponent(this).inject(this);
   }
 
-  @Override protected int layoutId() {
-    return R.layout.activity_add_contact;
-  }
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-//    ActivityScreen.setTransitionView(toolbar, "toolbar");
-//    toolbar.setTitle(R.string.label_add_contact);
-//    toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-//    toolbar.setNavigationOnClickListener(v -> finish());
-    setSupportActionBar(toolbar);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//    ActivityScreen.setTransitionView(appBar, "toolbar");
   }
 }

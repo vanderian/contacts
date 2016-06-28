@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">Contacts</string>
 
+    <string name="nav_host">app://sk.vander/</string>
+    <string name="nav_contact_list">app://sk.vander/contact/list</string>
+    <string name="nav_contact_add">app://sk.vander/contact/add</string>
+    <string name="nav_contact_order">app://sk.vander/contact/order</string>
+
     <string name="action_settings">Settings</string>
     <string name="action_add">Add</string>
 

@@ -22,7 +22,7 @@ import sk.vander.contacts.data.api.model.Contact;
  */
 public class ContactItemView extends RelativeLayout implements BindableView<Contact> {
   @BindView(R.id.name) TextView name;
-  @BindView(R.id.phone) TextView phone;
+  public @BindView(R.id.phone) TextView phone;
   @BindView(R.id.photo) ImageView photo;
 
   public ContactItemView(Context context) {

@@ -1,4 +1,4 @@
-<FrameLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -32,8 +32,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:tint="@color/app_bg"
         android:src="@drawable/ic_add"
+        android:tint="@color/app_bg"
         />
 
-</FrameLayout>
+</android.support.design.widget.CoordinatorLayout>

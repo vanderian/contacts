@@ -1,5 +1,6 @@
 package sk.vander.contacts.ui.contacts;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -17,20 +18,24 @@ import autodagger.AutoInjector;
 import butterknife.BindView;
 import rx.android.schedulers.AndroidSchedulers;
 import sk.vander.contacts.R;
+import sk.vander.contacts.base.BaseActivity;
 import sk.vander.contacts.base.BaseFragment;
 import sk.vander.contacts.base.DaggerService;
 import sk.vander.contacts.base.adapter.ListSource;
 import sk.vander.contacts.base.adapter.ObservableAdapter;
+import sk.vander.contacts.base.annotation.LayoutId;
 import sk.vander.contacts.base.navigation.activity.ActivityUriScreen;
 import sk.vander.contacts.data.api.model.Contact;
 import sk.vander.contacts.data.provider.DataProvider;
 import sk.vander.contacts.misc.SwipeRefreshObservable;
+import sk.vander.contacts.ui.contacts.adapter.ContactItemView;
 import sk.vander.contacts.ui.contacts.adapter.ContactsSource;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 @AutoInjector(ContactListActivity.class)
+@LayoutId(R.layout.fragment_contacts)
 public class ContactListFragment extends BaseFragment {
   @Inject DataProvider dataProvider;
   private final ListSource<Contact> source = new ContactsSource();
@@ -47,25 +52,23 @@ public class ContactListFragment extends BaseFragment {
     DaggerService.<ContactListActivityComponent>getDaggerComponent(getContext()).inject(this);
   }
 
-  @Override protected int layoutId() {
-    return R.layout.fragment_contacts;
-  }
-
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
     recyclerView.setAdapter(adapter);
     recyclerView.setHasFixedSize(true);
-    refreshLayout.setColorSchemeResources(R.color.green_500, R.color.amber_500, R.color.indigo_500, R.color.red_500);
+    refreshLayout.setProgressBackgroundColorSchemeResource(R.color.colorPrimary);
+    refreshLayout.setColorSchemeResources(R.color.red_500, R.color.yellow_500, R.color.green_500);
   }
 
   @Override public void onResume() {
     super.onResume();
     subscription.add(RxView.clicks(fab)
-        .map(x -> ActivityUriScreen.newBuilder().withUri(ContactAddActivity.URI)
-//            .withTransitionView(((ContactListActivity) getActivity()).toolbar, "toolbar")
+        .map(x -> ActivityUriScreen.newBuilder().withUri(Uri.parse(getString(R.string.nav_contact_add)))
+//            .withTransitionView(((ContactListActivity) getActivity()).appBar, "toolbar")
             .build())
         .subscribe(screenSwitcher::open));
+//        .subscribe(x -> Snackbar.make(getView(), "text", Snackbar.LENGTH_SHORT).show()));
 
     subscription.add(SwipeRefreshObservable.create(refreshLayout)
         .flatMap(x -> dataProvider.getContacts()
@@ -76,9 +79,13 @@ public class ContactListFragment extends BaseFragment {
         .subscribe(x -> adapter.notifyDataSetChanged(), Throwable::printStackTrace));
 
     subscription.add(adapter.onItemClicked()
-        .map(ObservableAdapter.ViewHolder::getItem)
-        .doOnNext(dataProvider.selectedContact()::onNext)
-        .map(x -> ActivityUriScreen.withUri(ContactOrderActivity.URI))
+//        .map(ObservableAdapter.ViewHolder::getItem)
+        .doOnNext(vh -> dataProvider.selectedContact().onNext(vh.getItem()))
+        .map(vh -> ActivityUriScreen.newBuilder()
+            .withTransitionView(((ContactItemView) vh.itemView).phone, "phone")
+            .withTransitionView(((BaseActivity) getActivity()).appBar, "appBar")
+            .withUri(Uri.parse(getString(R.string.nav_contact_order)))
+            .build())
         .subscribe(screenSwitcher::open));
   }
 }

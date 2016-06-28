@@ -24,7 +24,7 @@ public class ContactServiceMock implements ContactService {
     final Contact c1 = Contact.create("id_c1", "jano", "item", "87687678", "profile1.jpg", "asd89");
     final Contact c2 = Contact.create("id_c2", "ste4evo", "item", "845347687678", "", "asd89");
     final Contact c3 = Contact.create("id_c3", "c3p0", "item", "346346346", null, "asd89");
-    final ContactsResponse rc = ContactsResponse.create("list", "etag", Arrays.asList(c1, c2, c3));
+    final ContactsResponse rc = ContactsResponse.create("list", "etag", Arrays.asList(c1, c2, c3, c1, c2, c3, c1, c2, c3));
     return delegate.returningResponse(rc).getContacts();
   }
 

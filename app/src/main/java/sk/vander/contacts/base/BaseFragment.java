@@ -10,16 +10,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import rx.Observable;
 import rx.subscriptions.CompositeSubscription;
+import sk.vander.contacts.base.annotation.LayoutId;
 import sk.vander.contacts.base.navigation.activity.ActivityScreenSwitcher;
 import sk.vander.contacts.data.api.error.ResponseError;
 import sk.vander.contacts.data.api.error.RetrofitException;
+import sk.vander.contacts.misc.Utils;
 
 public abstract class BaseFragment extends Fragment {
+  private static final Map<String, Integer> INT_CACHE = new LinkedHashMap<>();
+
   protected final CompositeSubscription subscription = new CompositeSubscription();
   @Inject protected ActivityScreenSwitcher screenSwitcher;
 
@@ -55,6 +62,9 @@ public abstract class BaseFragment extends Fragment {
     subscription.clear();
   }
 
+  @LayoutRes protected int layoutId() {
+    return Utils.getAnnotationValue(getClass(), INT_CACHE, LayoutId.class);
+  }
+
   protected abstract void onInject();
-  @LayoutRes protected abstract int layoutId();
 }

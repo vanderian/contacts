@@ -17,6 +17,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import sk.vander.contacts.R;
 import sk.vander.contacts.base.BaseFragment;
 import sk.vander.contacts.base.DaggerService;
+import sk.vander.contacts.base.annotation.LayoutId;
 import sk.vander.contacts.data.api.model.request.ContactRequest;
 import sk.vander.contacts.data.provider.DataProvider;
 
@@ -24,6 +25,7 @@ import sk.vander.contacts.data.provider.DataProvider;
  * A placeholder fragment containing a simple view.
  */
 @AutoInjector(ContactAddActivity.class)
+@LayoutId(R.layout.fragment_add_contact)
 public class ContactAddFragment extends BaseFragment {
   @Inject DataProvider dataProvider;
 
@@ -38,10 +40,6 @@ public class ContactAddFragment extends BaseFragment {
 
   @Override protected void onInject() {
     DaggerService.<ContactAddActivityComponent>getDaggerComponent(getContext()).inject(this);
-  }
-
-  @Override protected int layoutId() {
-    return R.layout.fragment_add_contact;
   }
 
   @Override public void onResume() {

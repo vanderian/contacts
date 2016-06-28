@@ -5,5 +5,5 @@
     <color name="colorAccent">@color/amber_A700</color>
 
     <color name="app_bg">@color/grey_850</color>
-    <color name="gradient_center">#ff484848</color>
+    <color name="gradient_center">@color/grey_700</color>
 </resources>

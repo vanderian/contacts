@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
     android:paddingTop="@dimen/activity_vertical_margin"
     >
 
@@ -38,10 +39,10 @@
         />
 
     <View
-        android:layout_marginTop="16dp"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@id/photo"
+        android:layout_marginTop="16dp"
         android:background="@drawable/divider"
         />
 

@@ -26,6 +26,8 @@ import sk.vander.contacts.base.BaseFragment;
 import sk.vander.contacts.base.DaggerService;
 import sk.vander.contacts.base.adapter.ListSource;
 import sk.vander.contacts.base.adapter.ObservableAdapter;
+import sk.vander.contacts.base.annotation.LayoutId;
+import sk.vander.contacts.base.navigation.activity.ActivityScreen;
 import sk.vander.contacts.base.navigation.activity.ActivityUriScreen;
 import sk.vander.contacts.data.api.model.Order;
 import sk.vander.contacts.data.provider.DataProvider;
@@ -37,6 +39,7 @@ import sk.vander.contacts.ui.contacts.adapter.OrderSource;
  * A placeholder fragment containing a simple view.
  */
 @AutoInjector(ContactOrderActivity.class)
+@LayoutId(R.layout.fragment_orders)
 public class ContactOrderFragment extends BaseFragment {
   @Inject DataProvider dataProvider;
   private final ListSource<Order> source = new OrderSource();
@@ -54,16 +57,14 @@ public class ContactOrderFragment extends BaseFragment {
     DaggerService.<ContactOrderActivityComponent>getDaggerComponent(getContext()).inject(this);
   }
 
-  @Override protected int layoutId() {
-    return R.layout.fragment_orders;
-  }
-
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
+    ActivityScreen.setTransitionView(phone, "phone");
 
     recyclerView.setAdapter(adapter);
     recyclerView.setHasFixedSize(true);
-    refreshLayout.setColorSchemeResources(R.color.green_500, R.color.amber_500, R.color.indigo_500, R.color.red_500);
+    refreshLayout.setProgressBackgroundColorSchemeResource(R.color.colorPrimary)
+    refreshLayout.setColorSchemeResources(R.color.red_500, R.color.yellow_500, R.color.green_500);
   }
 
   @Override public void onResume() {
