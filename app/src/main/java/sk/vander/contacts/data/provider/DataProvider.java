@@ -1,5 +1,6 @@
 package sk.vander.contacts.data.provider;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -33,11 +34,17 @@ public class DataProvider {
   }
 
   public Observable<List<Contact>> getContacts() {
-    return contactService.getContacts().map(ListResponse::items).subscribeOn(Schedulers.io());
+    return Observable.concat(
+        contactService.getContactsCached().map(ListResponse::items).onErrorResumeNext(Observable.just(Collections.emptyList())),
+        contactService.getContacts().map(ListResponse::items))
+        .subscribeOn(Schedulers.io());
   }
 
   public Observable<List<Order>> getOrders() {
-    return selectedContact.flatMap(c -> orderService.getOrders(c.id())).map(ListResponse::items).subscribeOn(Schedulers.io());
+    return selectedContact.flatMap(c -> Observable.concat(
+        orderService.getOrdersCached(c.id()).map(ListResponse::items).onErrorResumeNext(Observable.just(Collections.emptyList())),
+        orderService.getOrders(c.id()).map(ListResponse::items)))
+        .subscribeOn(Schedulers.io());
   }
 
   public BehaviorSubject<Contact> selectedContact() {

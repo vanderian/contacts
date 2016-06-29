@@ -20,6 +20,10 @@ public class ContactServiceMock implements ContactService {
     this.delegate = delegate;
   }
 
+  @Override public Observable<ContactsResponse> getContactsCached() {
+    return getContacts();
+  }
+
   @Override public Observable<ContactsResponse> getContacts() {
     final Contact c1 = Contact.create("id_c1", "jano", "item", "87687678", "profile1.jpg", "asd89");
     final Contact c2 = Contact.create("id_c2", "ste4evo", "item", "845347687678", "", "asd89");

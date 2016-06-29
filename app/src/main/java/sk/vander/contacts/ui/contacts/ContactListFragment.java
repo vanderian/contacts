@@ -54,6 +54,7 @@ public class ContactListFragment extends BaseFragment {
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
+    adapter.setHasStableIds(true);
     recyclerView.setAdapter(adapter);
     recyclerView.setHasFixedSize(true);
     refreshLayout.setColorSchemeResources(R.color.red_500, R.color.yellow_500, R.color.green_500);
@@ -68,13 +69,15 @@ public class ContactListFragment extends BaseFragment {
         .subscribe(screenSwitcher::open));
 //        .subscribe(x -> getBaseActivity().showProgress(true)));
 
+    refreshLayout.post(() -> refreshLayout.setRefreshing(true));
     subscription.add(SwipeRefreshObservable.create(refreshLayout)
+        .startWith(new Object())
         .flatMap(x -> dataProvider.getContacts()
             .observeOn(AndroidSchedulers.mainThread())
             .onErrorResumeNext(t -> onError(t).map(er -> Collections.emptyList())))
         .doOnNext(source::setList)
-        .doOnEach(x -> refreshLayout.setRefreshing(false))
-        .subscribe(x -> adapter.notifyDataSetChanged(), Throwable::printStackTrace));
+        .doOnEach(x -> adapter.notifyDataSetChanged())
+        .subscribe(x -> refreshLayout.setRefreshing(false), Throwable::printStackTrace));
 
     subscription.add(adapter.onItemClicked()
 //        .map(ObservableAdapter.ViewHolder::getItem)

@@ -13,6 +13,9 @@ import sk.vander.contacts.data.api.model.response.ContactsResponse;
  * Created by arashid on 27/06/16.
  */
 public interface ContactService {
+  @Headers("Cache-Control: only-if-cached, max-stale=" + Integer.MAX_VALUE)
+  @GET("contactendpoint/v1/contact") Observable<ContactsResponse> getContactsCached();
+
   @GET("contactendpoint/v1/contact") Observable<ContactsResponse> getContacts();
 
   @Headers("Content-Type: application/json")

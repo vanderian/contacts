@@ -19,6 +19,10 @@ public class OrderServiceMock implements OrderService {
     this.delegate = delegate;
   }
 
+  @Override public Observable<OrdersResponse> getOrdersCached(@Path("id") String contactId) {
+    return getOrders(contactId);
+  }
+
   @Override public Observable<OrdersResponse> getOrders(@Path("id") String contactId) {
     final Order o1 = Order.create("HDD", 3, "tag");
     final Order o2 = Order.create("RAM", 30, "tag");

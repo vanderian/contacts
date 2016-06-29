@@ -4,42 +4,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     tools:context=".ui.contacts.ContactOrderActivity"
     tools:showIn="@layout/activity_orders"
     >
 
     <LinearLayout
         android:id="@+id/frame_header"
-        android:padding="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/bg_dim_light"
         android:foreground="?attr/selectableItemBackground"
+        android:orientation="vertical"
+        android:padding="16dp"
         >
 
         <TextView
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:text="@string/form_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/form_phone"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             />
 
         <TextView
             android:id="@+id/phone"
-            android:layout_marginTop="4dp"
-            tools:text="09090880"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            tools:text="09090880"
             />
 
     </LinearLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/frame_header"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/frame_header"
+        android:paddingRight="16dp"
+        android:src="@drawable/ic_phone"
+        android:tint="#fff"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
         android:layout_below="@id/frame_header"
+        android:background="?attr/colorAccent"
+        />
+
+    <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/frame_header"
         >
 
         <android.support.v7.widget.RecyclerView

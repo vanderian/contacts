@@ -16,6 +16,6 @@ import sk.vander.contacts.data.api.MockMode;
 public class DebugDataModule {
 
   @Provides @ApplicationScope @MockMode BooleanPreference provideMockPreference(SharedPreferences sp) {
-    return new BooleanPreference(sp, "pref_key_mock_mod", true);
+    return new BooleanPreference(sp, "pref_key_mock_mode", true);
   }
 }

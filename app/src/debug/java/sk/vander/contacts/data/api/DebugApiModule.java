@@ -5,6 +5,7 @@ import com.facebook.stetho.okhttp3.StethoInterceptor;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -37,9 +38,12 @@ public class DebugApiModule {
     return interceptor;
   }
 
-  @ApplicationScope @Provides OkHttpClient provideOkHttpClient(Cache cache, HttpLoggingInterceptor loggingInterceptor) {
+  @ApplicationScope @Provides OkHttpClient provideOkHttpClient(Cache cache,
+                                                               HttpLoggingInterceptor loggingInterceptor,
+                                                               @ForceCacheInterceptor Interceptor forceCache) {
     return new OkHttpClient.Builder()
         .addNetworkInterceptor(new StethoInterceptor())
+        .addNetworkInterceptor(forceCache)
         .addInterceptor(loggingInterceptor)
         .cache(cache)
         .build();
@@ -54,16 +58,10 @@ public class DebugApiModule {
   }
 
   @ApplicationScope @Provides ContactService provideContactService(Retrofit retrofit, MockRetrofit mockRetrofit, @MockMode Boolean isMock) {
-    if (isMock) {
-      return new ContactServiceMock(mockRetrofit.create(ContactService.class));
-    }
-    return retrofit.create(ContactService.class);
+    return isMock ? new ContactServiceMock(mockRetrofit.create(ContactService.class)) : retrofit.create(ContactService.class);
   }
 
   @ApplicationScope @Provides OrderService provideOrderService(Retrofit retrofit, MockRetrofit mockRetrofit, @MockMode Boolean isMock) {
-    if (isMock) {
-      return new OrderServiceMock(mockRetrofit.create(OrderService.class));
-    }
-    return retrofit.create(OrderService.class);
+    return isMock ? new OrderServiceMock(mockRetrofit.create(OrderService.class)) : retrofit.create(OrderService.class);
   }
 }

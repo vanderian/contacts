@@ -6,7 +6,9 @@ import com.google.gson.GsonBuilder;
 import auto.parcelgson.gson.AutoParcelGsonTypeAdapterFactory;
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import sk.vander.contacts.base.annotation.ApplicationScope;
@@ -32,5 +34,21 @@ public class ApiModule {
 //        .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
         .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory.create())
         .build();
+  }
+
+  @ApplicationScope @Provides @ForceCacheInterceptor Interceptor provideForceChacheInterceptor() {
+    return chain -> {
+      final Response originalResponse = chain.proceed(chain.request());
+      final String cacheControl = originalResponse.header("Cache-Control");
+
+      if (cacheControl == null || cacheControl.contains("no-store") || cacheControl.contains("no-cache") ||
+          cacheControl.contains("must-revalidate") || cacheControl.contains("max-age=0")) {
+        return originalResponse.newBuilder()
+            .header("Cache-Control", "public, max-age=" + 10)
+            .build();
+      } else {
+        return originalResponse;
+      }
+    };
   }
 }

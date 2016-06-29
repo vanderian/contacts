@@ -57,12 +57,13 @@ public abstract class BaseFragment extends Fragment {
             return Observable.just(ex.getMessage());
           }
           if (RetrofitException.Kind.HTTP.equals(ex.getKind())) {
-            return ex.getAsErrorResponse().map(er -> er.error().message());
+            return ex.getAsErrorResponse().map(er -> er.error().message()).onErrorResumeNext(Observable.just(ex.getMessage()));
           }
-//          Unexpected error -> crash
+//          Unexpected error -> fail
           return Observable.error(ex);
         })
 //        .doOnNext(er -> Snackbar.make(getView(), er.error().message(), Snackbar.LENGTH_SHORT).show())
+        .doOnError(t -> Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_SHORT).show())
         .doOnNext(er -> Toast.makeText(getContext(), er, Toast.LENGTH_SHORT).show());
   }
 

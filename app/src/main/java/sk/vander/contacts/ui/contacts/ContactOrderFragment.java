@@ -21,6 +21,7 @@ import autodagger.AutoInjector;
 import butterknife.BindView;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import sk.vander.contacts.R;
 import sk.vander.contacts.base.BaseFragment;
 import sk.vander.contacts.base.DaggerService;
@@ -61,6 +62,7 @@ public class ContactOrderFragment extends BaseFragment {
     super.onViewCreated(view, savedInstanceState);
     ActivityScreen.setTransitionView(phone, "phone");
 
+    adapter.setHasStableIds(true);
     recyclerView.setAdapter(adapter);
     recyclerView.setHasFixedSize(true);
     refreshLayout.setColorSchemeResources(R.color.red_500, R.color.yellow_500, R.color.green_500);
@@ -72,7 +74,7 @@ public class ContactOrderFragment extends BaseFragment {
         dataProvider.selectedContact().doOnNext(c -> phone.setText(c.phone())),
         (x, c) -> c)
         .filter(c -> RuntimePermissions.requestPermissions(getActivity(), Manifest.permission.CALL_PHONE))
-        .flatMap(c -> snack(Snackbar.make(getView(), "Make call?", Snackbar.LENGTH_SHORT)).map(s -> c))
+        .flatMap(snack(Snackbar.make(getView(), "Make call?", Snackbar.LENGTH_SHORT)))
         .map(c -> ActivityUriScreen.newBuilder()
             .withAction(Intent.ACTION_CALL)
             .withUri(Uri.parse("tel://" + c.phone()))
@@ -80,21 +82,23 @@ public class ContactOrderFragment extends BaseFragment {
             .build())
         .subscribe(screenSwitcher::open, Throwable::printStackTrace));
 
+    refreshLayout.post(() -> refreshLayout.setRefreshing(true));
     subscription.add(SwipeRefreshObservable.create(refreshLayout)
+        .startWith(new Object())
         .flatMap(x -> dataProvider.getOrders()
             .observeOn(AndroidSchedulers.mainThread())
             .onErrorResumeNext(t -> onError(t).map(er -> Collections.emptyList())))
         .doOnNext(source::setList)
-        .doOnEach(x -> refreshLayout.setRefreshing(false))
-        .subscribe(x -> adapter.notifyDataSetChanged(), Throwable::printStackTrace));
+        .doOnEach(x -> adapter.notifyDataSetChanged())
+        .subscribe(x -> refreshLayout.setRefreshing(false), Throwable::printStackTrace));
   }
 
-  private Observable<Snackbar> snack(Snackbar snackbar) {
-    return Observable.create(subscriber -> {
+  private <T> Func1<T, Observable<T>> snack(Snackbar snackbar) {
+    return item -> Observable.create(subscriber -> {
       snackbar.setAction("Call", v -> {
         subscriber.onNext(snackbar);
         subscriber.onCompleted();
       }).show();
-    });
+    }).map(x -> item);
   }
 }
