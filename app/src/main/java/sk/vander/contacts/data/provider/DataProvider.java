@@ -1,7 +1,9 @@
 package sk.vander.contacts.data.provider;
 
-import java.util.Collections;
+import com.fernandocejas.frodo.annotation.RxLogObservable;
+
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -33,16 +35,21 @@ public class DataProvider {
     this.orderService = orderService;
   }
 
+//  note for edge case: need to apply delay, cached onNext gets consumed by onError in enclosing flatMap, testable with no internet
+  @RxLogObservable
   public Observable<List<Contact>> getContacts() {
     return Observable.concat(
-        contactService.getContactsCached().map(ListResponse::items).onErrorResumeNext(Observable.just(Collections.emptyList())),
+        contactService.getContactsCached().map(ListResponse::items).onErrorResumeNext(Observable.empty()),
+        Observable.<List<Contact>>empty().delay(1, TimeUnit.SECONDS),
         contactService.getContacts().map(ListResponse::items))
         .subscribeOn(Schedulers.io());
   }
 
+  @RxLogObservable
   public Observable<List<Order>> getOrders() {
     return selectedContact.flatMap(c -> Observable.concat(
-        orderService.getOrdersCached(c.id()).map(ListResponse::items).onErrorResumeNext(Observable.just(Collections.emptyList())),
+        orderService.getOrdersCached(c.id()).map(ListResponse::items).onErrorResumeNext(Observable.empty()),
+        Observable.<List<Order>>empty().delay(1, TimeUnit.SECONDS),
         orderService.getOrders(c.id()).map(ListResponse::items)))
         .subscribeOn(Schedulers.io());
   }
