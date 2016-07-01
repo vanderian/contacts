@@ -36,7 +36,7 @@ public class ApiModule {
         .build();
   }
 
-  @ApplicationScope @Provides @ForceCacheInterceptor Interceptor provideForceChacheInterceptor() {
+  @ApplicationScope @Provides @ForceCacheInterceptor Interceptor provideForceCacheInterceptor() {
     return chain -> {
       final Response originalResponse = chain.proceed(chain.request());
       final String cacheControl = originalResponse.header("Cache-Control");
@@ -44,6 +44,7 @@ public class ApiModule {
       if (cacheControl == null || cacheControl.contains("no-store") || cacheControl.contains("no-cache") ||
           cacheControl.contains("must-revalidate") || cacheControl.contains("max-age=0")) {
         return originalResponse.newBuilder()
+            .removeHeader("pragma")
             .header("Cache-Control", "public, max-age=" + 10)
             .build();
       } else {

@@ -11,12 +11,14 @@ import android.view.View;
 import com.jakewharton.rxbinding.view.RxView;
 
 import java.util.Collections;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import autodagger.AutoInjector;
 import butterknife.BindView;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.observables.ConnectableObservable;
 import sk.vander.contacts.R;
 import sk.vander.contacts.base.BaseFragment;
 import sk.vander.contacts.base.DaggerService;
@@ -69,15 +71,20 @@ public class ContactListFragment extends BaseFragment {
         .subscribe(screenSwitcher::open));
 //        .subscribe(x -> getBaseActivity().showProgress(true)));
 
-    refreshLayout.post(() -> refreshLayout.setRefreshing(true));
-    subscription.add(SwipeRefreshObservable.create(refreshLayout)
+    final ConnectableObservable<List<Contact>> o = SwipeRefreshObservable.create(refreshLayout)
         .startWith(new Object())
         .flatMap(x -> dataProvider.getContacts()
             .observeOn(AndroidSchedulers.mainThread())
             .onErrorResumeNext(t -> onError(t).map(er -> Collections.emptyList())))
+        .doOnEach(x -> refreshLayout.setRefreshing(false))
+        .filter(l -> !l.isEmpty())
         .doOnNext(source::setList)
-        .doOnEach(x -> adapter.notifyDataSetChanged())
-        .subscribe(x -> refreshLayout.setRefreshing(false), Throwable::printStackTrace));
+        .publish();
+    subscription.add(o.subscribe(x -> adapter.notifyDataSetChanged(), Throwable::printStackTrace));
+    refreshLayout.post(() -> {
+      refreshLayout.setRefreshing(true);
+      o.connect();
+    });
 
     subscription.add(adapter.onItemClicked()
 //        .map(ObservableAdapter.ViewHolder::getItem)

@@ -10,7 +10,7 @@ import auto.parcelgson.AutoParcelGson;
 @AutoParcelGson
 public abstract class Contact {
   public abstract String id();
-  public abstract String name();
+  @Nullable public abstract String name();
   public abstract String kind();
   @Nullable public abstract String phone();
   @Nullable public abstract String pictureUrl();

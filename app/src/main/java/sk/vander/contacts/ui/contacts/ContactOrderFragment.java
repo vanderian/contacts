@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.jakewharton.rxbinding.view.RxView;
 
 import java.util.Collections;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -22,6 +23,7 @@ import butterknife.BindView;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
+import rx.observables.ConnectableObservable;
 import sk.vander.contacts.R;
 import sk.vander.contacts.base.BaseFragment;
 import sk.vander.contacts.base.DaggerService;
@@ -82,15 +84,20 @@ public class ContactOrderFragment extends BaseFragment {
             .build())
         .subscribe(screenSwitcher::open, Throwable::printStackTrace));
 
-    refreshLayout.post(() -> refreshLayout.setRefreshing(true));
-    subscription.add(SwipeRefreshObservable.create(refreshLayout)
+    final ConnectableObservable<List<Order>> o = SwipeRefreshObservable.create(refreshLayout)
         .startWith(new Object())
         .flatMap(x -> dataProvider.getOrders()
             .observeOn(AndroidSchedulers.mainThread())
             .onErrorResumeNext(t -> onError(t).map(er -> Collections.emptyList())))
+        .doOnEach(x -> refreshLayout.setRefreshing(false))
+        .filter(l -> !l.isEmpty())
         .doOnNext(source::setList)
-        .doOnEach(x -> adapter.notifyDataSetChanged())
-        .subscribe(x -> refreshLayout.setRefreshing(false), Throwable::printStackTrace));
+        .publish();
+    subscription.add(o.subscribe(x -> adapter.notifyDataSetChanged(), Throwable::printStackTrace));
+    refreshLayout.post(() -> {
+      refreshLayout.setRefreshing(true);
+      o.connect();
+    });
   }
 
   private <T> Func1<T, Observable<T>> snack(Snackbar snackbar) {

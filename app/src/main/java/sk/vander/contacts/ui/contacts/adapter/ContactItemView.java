@@ -48,7 +48,6 @@ public class ContactItemView extends RelativeLayout implements BindableView<Cont
   }
 
   @Override public void bindTo(Contact item) {
-    Picasso.with(getContext()).cancelRequest(photo);
     name.setText(item.name());
     phone.setText(item.phone());
     final String url = !TextUtils.isEmpty(item.pictureUrl()) ? ApiModule.HOST + item.pictureUrl() : null;
